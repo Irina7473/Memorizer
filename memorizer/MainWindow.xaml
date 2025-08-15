@@ -5,8 +5,53 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:memorizer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Memorizer" Height="600" Width="900">
+    <Window.Resources>
+        <ResourceDictionary Source="Style.xaml"/>
+    </Window.Resources>
     <Grid>
 
+        <StackPanel Height="450" Width="850">
+            <Label Content="Ваши даты для напоминания" Height="30" FontSize="15" HorizontalAlignment="Center"/>
+            <!--  
+            ItemsSource="{Binding Items}"
+            <TextBox Width="200" Margin="10" Text="{Binding Calendar, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Width="200" Margin="10" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Width="200" Margin="10" Text="{Binding Remind, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Width="100" Margin="10" Content="Добавить" Command="{Binding AddItemCommand}"/>
+            -->
+            <ListView Name="ObjectiveList">
+                <ListView.View>
+                    <GridView >
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Calendar}" Width="150
+                                        ">Дата</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Width="550">Описание</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Remind}" Width="150">Напомнить за ...дней</GridViewColumn>
+                    </GridView>
+                </ListView.View>
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Изменить" Click="MenuItem_Click_Change"></MenuItem>
+                        <MenuItem Header="Удалить" Click="MenuItem_Click_Delete"></MenuItem>
+                    </ContextMenu>
+                </ListView.ContextMenu>
+            </ListView>
+
+            <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Left"  Margin="20">
+                <Button x:Name="AddLine" Content="Добавить строки" Click="AddLine_Click" Style="{DynamicResource style_Button}"/>
+                <TextBox Name="TextBox_Line" Width="25" Height="25" TextAlignment="Center" FontSize="15" TextWrapping="Wrap" TextChanged="TextBox_Line_TextChanged"/>
+            </WrapPanel>
+        </StackPanel>
+
+        <StatusBar Name="sbar" VerticalAlignment="Bottom"  Background="LightBlue" >
+            <StatusBarItem>
+                <TextBlock Text="Состояние"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem >
+                <TextBlock x:Name="State" />
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>
+
