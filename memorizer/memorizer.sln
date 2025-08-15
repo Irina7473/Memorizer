@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36408.4 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "memorizer", "memorizer.csproj", "{0422838F-59DB-5D25-3E62-3847A874110C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FD2ED15D-4230-EAD9-C115-32EF5776BA9B} = {FD2ED15D-4230-EAD9-C115-32EF5776BA9B}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary", "..\ClassLibrary\ClassLibrary.csproj", "{FD2ED15D-4230-EAD9-C115-32EF5776BA9B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0422838F-59DB-5D25-3E62-3847A874110C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0422838F-59DB-5D25-3E62-3847A874110C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0422838F-59DB-5D25-3E62-3847A874110C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0422838F-59DB-5D25-3E62-3847A874110C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD2ED15D-4230-EAD9-C115-32EF5776BA9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD2ED15D-4230-EAD9-C115-32EF5776BA9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD2ED15D-4230-EAD9-C115-32EF5776BA9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD2ED15D-4230-EAD9-C115-32EF5776BA9B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {81D438F1-DA63-4F86-A38E-234A84459CA6}
+	EndGlobalSection
+EndGlobal

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:memorizer"
+        xmlns:local="clr-namespace:memorizer" xmlns:classlibrary="clr-namespace:ClassLibrary;assembly=ClassLibrary" d:DataContext="{d:DesignInstance Type=classlibrary:Reminder}"
         mc:Ignorable="d"
         Title="Memorizer" Height="600" Width="900">
     <Window.Resources>
@@ -20,7 +20,7 @@
             <TextBox Width="200" Margin="10" Text="{Binding Remind, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Width="100" Margin="10" Content="Добавить" Command="{Binding AddItemCommand}"/>
             -->
-            <ListView Name="ObjectiveList">
+            <ListView Name="ObjectiveList" ItemsSource="{Binding ITEMS}">
                 <ListView.View>
                     <GridView >
                         <GridViewColumn DisplayMemberBinding="{Binding Path=Calendar}" Width="150
@@ -41,6 +41,15 @@
                 <Button x:Name="AddLine" Content="Добавить строки" Click="AddLine_Click" Style="{DynamicResource style_Button}"/>
                 <TextBox Name="TextBox_Line" Width="25" Height="25" TextAlignment="Center" FontSize="15" TextWrapping="Wrap" TextChanged="TextBox_Line_TextChanged"/>
             </WrapPanel>
+            <WrapPanel>
+                <TextBox x:Name="CalendarTextBox" Width="150" Height="25"  />
+                <TextBox x:Name="DescriptionTextBox" Width="550" Height="25"  />
+                <TextBox x:Name="RemindTextBox" Width="150" Height="25"  />
+                <Button x:Name="AddReminder"  Content="Добавить" Width="100" Height="25"  Click="AddReminder_Click"/>
+                <Button x:Name="RecordToFile"  Content="Записать в файл" Width="200" Height="25" Click="RecordToFile_Click" />
+                <Button x:Name="ReaderFromFail"  Content="Прочитать из файла" Width="200" Height="25" Click="ReaderFromFail_Click" />
+            </WrapPanel>
+
         </StackPanel>
 
         <StatusBar Name="sbar" VerticalAlignment="Bottom"  Background="LightBlue" >

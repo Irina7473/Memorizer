@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -9,20 +10,20 @@ using System.Threading.Tasks;
 
 namespace ClassLibrary
 {
-    public class SaveToFile
+    public static class SaveToFile
     {
         public static Message Info;
         private static string FilePath = Path.Combine(Path.GetDirectoryName(
             Assembly.GetExecutingAssembly().Location), "Memorizer.txt");
 
-        public static void RecordToFile(ObservableCollection<Objective> items)
+        public static void RecordToFile(ObservableCollection<Reminder> items)
         {
-            var file = File.CreateText(FilePath);
+            using var file = File.CreateText(FilePath);
             if (items.Count > 0)
             {
                 foreach (var item in items)
                 {
-                    var text = item.Calendar + "/" + item.Description + "/" + item.Remind;
+                    var text = item.Calendar.ToString() + "/" + item.Description + "/" + item.Remind;
                     file.WriteLine(text);
                 }
             }                
@@ -31,18 +32,20 @@ namespace ClassLibrary
         
 
         //todo
-        public static ObservableCollection<Objective> ReaderFromFail()
+        public static ObservableCollection<Reminder> ReaderFromFail()
         {
             if (File.Exists(FilePath))
             {
-                var items = new ObservableCollection<Objective>();
+                var items = new ObservableCollection<Reminder>();
                 using (var reader = new StreamReader(FilePath))
                 {
                     string line;
                     while ((line = reader.ReadLine()) != null)
                     {
                         string[] feld = line.Split('/');
-                        var item = new Objective(DateOnly.Parse(feld[0]), feld[1], Int32.Parse(feld[2]));
+                        var item = new Reminder(
+                            DateOnly.ParseExact(feld[0], "dd.MM.yyyy", CultureInfo.InvariantCulture,DateTimeStyles.None),
+                            feld[1], Int32.Parse(feld[2]));
                         items.Add(item);
                     }
                 }

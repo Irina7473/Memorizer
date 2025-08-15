@@ -3,41 +3,40 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Xml.Linq;
 
 namespace memorizer
 {
-    public class MainViewModel
+    public class MainViewModel : ViewModelBase
     {
-        ObservableCollection<Objective> Items { get; set; }
-        RelayCommand AddItemCommand;
+        public ObservableCollection<Reminder> Reminders { get; set; }
+        public Reminder NewReminder { get; set; }
+
+        public ICommand AddReminderCommand { get; }
+
         public MainViewModel()
         {
-            Items = new ObservableCollection<Objective>();
-            AddItemCommand = new RelayCommand(AddItem);
+            Reminders = new ObservableCollection<Reminder>();
+            NewReminder = new Reminder();
+            AddReminderCommand = new RelayCommand(AddReminder);
         }
 
-        private void AddItem()
+        private void AddReminder()
         {
-            Items.Add(new Objective());
-            /*
-            if (!string.IsNullOrWhiteSpace(Name) && Age > 0)
+            if (NewReminder.Calendar> DateOnly.MinValue && !string.IsNullOrWhiteSpace(NewReminder.Description) && NewReminder.Remind > 0)
             {
-                ITEMS.Add(new Item { Name = Name, Age = Age });
-                Name = string.Empty; // Очистка поля ввода
-                Age = 0; // Сброс возраста
-            }*/
+                Reminders.Add(new Reminder { Calendar = NewReminder.Calendar, Description=NewReminder.Description, Remind=NewReminder.Remind});
+                NewReminder.Calendar = DateOnly.MinValue;
+                NewReminder.Description = string.Empty;
+                NewReminder.Remind = 0;
+            }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
     }
+    
 }
