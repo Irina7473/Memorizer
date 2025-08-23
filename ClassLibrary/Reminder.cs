@@ -12,6 +12,7 @@ namespace ClassLibrary
         public static event Update Creat = () => { /*Info?.Invoke("Дата создана");*/ };
 
         private DateOnly _calendar;
+        private string _date;
         private string _description ;
         private int _remind;
 
@@ -20,6 +21,12 @@ namespace ClassLibrary
             get { return _calendar; }
             set { _calendar = value; OnPropertyChanged("Calendar"); }
         }
+        public string Date
+        {
+            get { return _date; }
+            set { _date = value; OnPropertyChanged("date"); }
+        }
+
         public string Description
         {
             get { return _description; }
@@ -43,6 +50,7 @@ namespace ClassLibrary
         public Reminder(DateOnly calendar, string description, int remind)
         {
             Calendar = calendar;
+            Date = calendar.ToString();
             Description = description;
             Remind = remind;
         }
@@ -59,5 +67,14 @@ namespace ClassLibrary
             if (left == rigt) return false;
             else return true;
         }
+
+        /*
+        public static bool MoreCalendar (Reminder left, Reminder rigt)
+        {
+            if (left.Calendar.Month > rigt.Calendar.Month) return true;
+            else if (left.Calendar.Month == rigt.Calendar.Month && left.Calendar.Day > rigt.Calendar.Day) return true;
+            else return false;
+        }*/
+
     }
 }

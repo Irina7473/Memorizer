@@ -1,58 +1,69 @@
-﻿<Window x:Class="memorizer.MainWindow"
+﻿<mah:MetroWindow x:Class="memorizer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:memorizer" xmlns:classlibrary="clr-namespace:ClassLibrary;assembly=ClassLibrary" d:DataContext="{d:DesignInstance Type=classlibrary:Reminder}"
         mc:Ignorable="d"
-        Title="Memorizer" Height="600" Width="900">
+        xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+        Title="Memorizer" Height="700" Width="900">
     <Window.Resources>
-        <ResourceDictionary Source="Style.xaml"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Style.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />                
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
     <Grid>
-
-        <StackPanel Height="450" Width="850">
+        <StackPanel Height="650" Width="850">
             <Label Content="Ваши даты для напоминания" Height="30" FontSize="15" HorizontalAlignment="Center"/>
-            <!--  
-            ItemsSource="{Binding Items}"
-            <TextBox Width="200" Margin="10" Text="{Binding Calendar, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBox Width="200" Margin="10" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBox Width="200" Margin="10" Text="{Binding Remind, UpdateSourceTrigger=PropertyChanged}"/>
-            <Button Width="100" Margin="10" Content="Добавить" Command="{Binding AddItemCommand}"/>
-            -->
-            <ListView Name="ObjectiveList" ItemsSource="{Binding ITEMS}">
-                <ListView.View>
-                    <GridView >
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Calendar}" Width="150
-                                        ">Дата</GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Width="550">Описание</GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Remind}" Width="150">Напомнить за ...дней</GridViewColumn>
-                    </GridView>
-                </ListView.View>
-                <ListView.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Изменить" Click="MenuItem_Click_Change"></MenuItem>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Height="350">
+                <ListView Name="ObjectiveList" ItemsSource="{Binding ITEMS}">                
+                    <ListView.View>
+                        <GridView >
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Date}" Width="150">Дата</GridViewColumn>
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Width="550">Описание</GridViewColumn>
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Remind}" Width="150">Напомнить за ...дней</GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Изменить" Click="MenuItem_Click_Change"></MenuItem>
                         <MenuItem Header="Удалить" Click="MenuItem_Click_Delete"></MenuItem>
-                    </ContextMenu>
-                </ListView.ContextMenu>
-            </ListView>
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+                 </ListView>
+            </ScrollViewer>
 
-            <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Left"  Margin="20">
+            <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Left"  Margin="10">
                 <Button x:Name="AddLine" Content="Добавить строки" Click="AddLine_Click" Style="{DynamicResource style_Button}"/>
-                <TextBox Name="TextBox_Line" Width="25" Height="25" TextAlignment="Center" FontSize="15" TextWrapping="Wrap" TextChanged="TextBox_Line_TextChanged"/>
+                <TextBox Name="LineTextBox" Width="40" Height="25" TextAlignment="Center" FontSize="12" />
             </WrapPanel>
             <WrapPanel>
-                <TextBox x:Name="CalendarTextBox" Width="150" Height="25"  />
-                <TextBox x:Name="DescriptionTextBox" Width="550" Height="25"  />
-                <TextBox x:Name="RemindTextBox" Width="150" Height="25"  />
-                <Button x:Name="AddReminder"  Content="Добавить" Width="100" Height="25"  Click="AddReminder_Click"/>
-                <Button x:Name="RecordToFile"  Content="Записать в файл" Width="200" Height="25" Click="RecordToFile_Click" />
-                <Button x:Name="ReaderFromFail"  Content="Прочитать из файла" Width="200" Height="25" Click="ReaderFromFail_Click" />
+                <TextBox x:Name="CalendarTextBox" controls:TextBoxHelper.Watermark="Дата ХХ.ХХ.ХХХХ" 
+                         Width="150" Height="50" FontSize="15" TextWrapping="Wrap" />
+                <TextBox x:Name="DescriptionTextBox" controls:TextBoxHelper.Watermark="Описание" 
+                         Width="550" Height="50" FontSize="15" TextWrapping="Wrap" />
+                <TextBox x:Name="RemindTextBox" controls:TextBoxHelper.Watermark="За сколько дней напомнить" 
+                         Width="150" Height="50" FontSize="15" TextWrapping="Wrap" />
+                <Button x:Name="AddReminder"  Content="Добавить в список" Click="AddReminder_Click" Style="{DynamicResource style_Button}"/>
+                <Button x:Name="UpdateReminde"  Content="Записать изменения" Click="UpdateReminde_Click" Style="{DynamicResource style_Button}" />
+                <Button x:Name="ShowAll"  Content="Показать все" Click="ShowAll_Click" Style="{DynamicResource style_Button}" />
+                <Button x:Name="SortByCalendars"  Content="Сортировать по датам" Click="SortByCalendars_Click" Style="{DynamicResource style_Button}" />
+                <Button x:Name="ShowForCurrentMonth"  Content="Показать все за текущий месяц" Click="ShowForCurrentMonth_Click" Style="{DynamicResource style_Button}" />
+                <!--
+                <Button x:Name="RecordToFile"  Content="Записать в файл" Click="RecordToFile_Click" Style="{DynamicResource style_Button}" />
+                    -->
+                <TextBox Name="SearchPhraseTextBox" Width="550" Height="30" TextAlignment="Center" FontSize="15" TextWrapping="Wrap" />
+                <Button x:Name="FindByDescription"  Content="Найти по описанию" Click="FindByDescription_Click" Style="{DynamicResource style_Button}" />
             </WrapPanel>
 
         </StackPanel>
 
-        <StatusBar Name="sbar" VerticalAlignment="Bottom"  Background="LightBlue" >
+        <StatusBar Name="sbar" VerticalAlignment="Bottom"  Background="LightBlue" Foreground="Black" >
             <StatusBarItem>
                 <TextBlock Text="Состояние"/>
             </StatusBarItem>
@@ -62,5 +73,4 @@
             </StatusBarItem>
         </StatusBar>
     </Grid>
-</Window>
-
+</mah:MetroWindow>

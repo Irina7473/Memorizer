@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data.SqlTypes;
 using System.Globalization;
 using System.Linq;
 using System.Reflection.Emit;
@@ -21,62 +22,82 @@ using System.Windows.Shapes;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace memorizer
-{
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+{    
+    public partial class MainWindow
     {
         public ObservableCollection<Reminder> ITEMS { get; set; }
+        public ObservableCollection<Reminder> Reminders { get; set; }
+        public ObservableCollection<Reminder> FIND { get; set; }
+        int index;
 
         public MainWindow()
         {
             InitializeComponent();
-            ITEMS = new ObservableCollection<Reminder>();
-            //this.DataContext = ITEMS;
+            ITEMS = [];
+            Reminders = [];
+            FIND = [];
             DataContext = this;
-            //ObjectiveList.ItemsSource = ITEMS;
-            //this.DataContext = new MainViewModel();
-            //ItemsSource="{Binding Reminders}"
-
+            index = -1;
             Uploading_Click();
-
         }
 
-        
-
-        private void AddReminder_Click(object sender, RoutedEventArgs e)
+        private Reminder? NewReminder()
         {
-            
             string description = DescriptionTextBox.Text;
-            if (DateOnly.TryParseExact(CalendarTextBox.Text, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateOnly calendar)
+            if (DateOnly.TryParseExact(CalendarTextBox.Text, "dd.MM.yyyy", CultureInfo.InvariantCulture, 
+                DateTimeStyles.None, out DateOnly calendar)
                 && Int32.TryParse(RemindTextBox.Text, out int remind))
             {
-                ITEMS.Add(new Reminder(calendar, description, remind));
-                CalendarTextBox.Clear();
-                DescriptionTextBox.Clear();
-                RemindTextBox.Clear();
-                State.Text = "Дата добавлена в список";
+                return new Reminder(calendar, description, remind);
             }
             else
             {
                 MessageBox.Show("Введите валидные дату и количество дней для напоминания");
+                return null;
             }
-            
         }
 
+        private void AddReminder_Click(object sender, RoutedEventArgs e)
+        {           
+            var item = NewReminder();
+            if (item is not null)
+            {
+                ITEMS.Add(item);
+                Reminders.Add(item);
+                CalendarTextBox.Clear();
+                DescriptionTextBox.Clear();
+                RemindTextBox.Clear();
+                State.Text = "Дата добавлена в список";
+            }           
+        }
 
         private void MenuItem_Click_Change(object sender, RoutedEventArgs e)
         {
             if (ObjectiveList.SelectedItem is Reminder selectedItem)
             {
-                int index = ITEMS.IndexOf(selectedItem); 
+                index = Reminders.IndexOf(selectedItem);
                 if (index != -1)
                 {
-                    ITEMS[index] = selectedItem;
+                    CalendarTextBox.Text = selectedItem.Date;
+                    DescriptionTextBox.Text = selectedItem.Description;
+                    RemindTextBox.Text = selectedItem.Remind.ToString();
                 }
+            }
+        }
+
+        private void UpdateReminde_Click(object sender, RoutedEventArgs e)
+        {
+            var item = NewReminder();
+            if (index != -1 && item is not null && item != ITEMS[index])
+            { 
+                Reminders[index] = item;
+                ITEMS = new ObservableCollection<Reminder>(Reminders.OrderBy(p => p.Calendar));
+                ObjectiveList.ItemsSource = ITEMS;
                 State.Text = "Дата изменена";
             }
+            CalendarTextBox.Clear();
+            DescriptionTextBox.Clear();
+            RemindTextBox.Clear();
         }
 
         private void MenuItem_Click_Delete(object sender, RoutedEventArgs e)
@@ -90,42 +111,90 @@ namespace memorizer
 
         private void AddLine_Click(object sender, RoutedEventArgs e)
         {
-            var number = Int32.Parse(TextBox_Line.Text);
-            for (int i = 0; i < number; i++) ITEMS.Add(new Reminder(DateOnly.MinValue, string.Empty, 0));
-            TextBox_Line.Clear();
-        }
-
-        private void TextBox_Line_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            try { Int32.Parse(TextBox_Line.Text); }
-            catch { 
-                TextBox_Line.Clear();
-                MessageBox.Show("Введите целое число");
-
+            if (Int32.TryParse(LineTextBox.Text, out int number))
+            {
+                for (int i = 0; i < number; i++) ITEMS.Add(new Reminder(DateOnly.MinValue, string.Empty, 0));
+                LineTextBox.Clear();
             }
+            else MessageBox.Show("Введите число добавляемых строк");
         }
-
-        private void RecordToFile_Click(object sender, RoutedEventArgs e)
+        
+        private void ShowAll_Click(object sender, RoutedEventArgs e)
         {
-            SaveToFile.RecordToFile(ITEMS);
-            State.Text = "Список дат записан в файл";
+            ITEMS = new ObservableCollection<Reminder>(Reminders.OrderBy(item => item.Calendar));
+            ObjectiveList.ItemsSource = ITEMS;
         }
-
-        private void ReaderFromFail_Click(object sender, RoutedEventArgs e)
-        {
-            Uploading_Click();
-        }
-
+        
         private void Uploading_Click()
         {
-            var newItems = SaveToFile.ReaderFromFail();
-            if (newItems != null && newItems.Count > 0)
+            Reminders = SaveToFile.ReaderFromFail();
+            if (Reminders != null && Reminders.Count > 0)
             {
-                ITEMS = newItems;
-                //ObjectiveList.Items.Refresh();
+                ITEMS = new ObservableCollection<Reminder>(Reminders.OrderBy(item => item.Calendar));
+                ObjectiveList.ItemsSource = ITEMS;
                 State.Text = "Список дат загружен из файла";
             }
             else State.Text = "Список дат пуст";
+        }
+
+        private void SortByCalendars_Click(object sender, RoutedEventArgs e)
+        {         
+            ITEMS = new ObservableCollection<Reminder>(ITEMS
+                .OrderBy(item => item.Calendar.Month)
+                .ThenBy(item => item.Calendar.Day)
+                );
+
+            ObjectiveList.ItemsSource = ITEMS;
+        }
+
+        private void ShowForCurrentMonth_Click(object sender, RoutedEventArgs e)
+        {
+            var currentMonth = DateOnly.FromDateTime(DateTime.Now).Month;
+            FIND = new ObservableCollection<Reminder>(Reminders.Where(item => item.Calendar.Month == currentMonth));
+            if (FIND.Count == 0)
+                MessageBox.Show("В вашем списке за текущий месяц нет памятных дат");
+            else
+            {
+                ITEMS = FIND;
+                ObjectiveList.ItemsSource = ITEMS;
+                FIND = [];
+            }
+            SearchPhraseTextBox.Clear();
+        }
+
+        private void FindByDescription_Click(object sender, RoutedEventArgs e)
+        {
+            var search = SearchPhraseTextBox.Text;
+            foreach (var item in Reminders) 
+            {
+                bool containsIgnoreCase = item.Description.IndexOf(search, StringComparison.OrdinalIgnoreCase) >= 0;
+                if (containsIgnoreCase) FIND.Add(item);   
+            }
+            if (FIND.Count == 0)
+                MessageBox.Show("Искомая фраза не найдена");
+            else
+            {
+                ITEMS = new ObservableCollection<Reminder>(FIND.OrderBy(item => item.Calendar));
+                ObjectiveList.ItemsSource = ITEMS;
+                FIND = [];
+            }
+            SearchPhraseTextBox.Clear();
+        }                      
+        
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            var result = MessageBox.Show(
+                "Вы уверены, что хотите выйти?",
+                "Подтверждение выхода",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.No)
+            {
+                e.Cancel = true;
+            }
+            else SaveToFile.RecordToFile(Reminders);
+            base.OnClosing(e);
         }
     }
 }

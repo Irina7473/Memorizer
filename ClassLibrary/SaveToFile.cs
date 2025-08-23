@@ -23,7 +23,7 @@ namespace ClassLibrary
             {
                 foreach (var item in items)
                 {
-                    var text = item.Calendar.ToString() + "/" + item.Description + "/" + item.Remind;
+                    var text = item.Date + "/" + item.Description + "/" + item.Remind;
                     file.WriteLine(text);
                 }
             }                
