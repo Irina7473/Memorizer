@@ -62,8 +62,9 @@ namespace memorizer
             var item = NewReminder();
             if (item is not null)
             {
-                ITEMS.Add(item);
                 Reminders.Add(item);
+                ITEMS = new ObservableCollection<Reminder>(Reminders.OrderBy(item => item.Calendar));
+                ObjectiveList.ItemsSource = ITEMS;
                 CalendarTextBox.Clear();
                 DescriptionTextBox.Clear();
                 RemindTextBox.Clear();
@@ -118,7 +119,14 @@ namespace memorizer
             }
             else MessageBox.Show("Введите число добавляемых строк");
         }
-        
+
+
+        private void RecordToFile_Click(object sender, RoutedEventArgs e)
+        {
+            SaveToFile.RecordToFile(Reminders);
+            State.Text = "Список дат записан в файл";
+        }
+
         private void ShowAll_Click(object sender, RoutedEventArgs e)
         {
             ITEMS = new ObservableCollection<Reminder>(Reminders.OrderBy(item => item.Calendar));
@@ -196,5 +204,6 @@ namespace memorizer
             else SaveToFile.RecordToFile(Reminders);
             base.OnClosing(e);
         }
+
     }
 }

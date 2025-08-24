@@ -1,5 +1,8 @@
 ﻿using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Security.Principal;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ClassLibrary
 {
@@ -68,13 +71,16 @@ namespace ClassLibrary
             else return true;
         }
 
-        /*
-        public static bool MoreCalendar (Reminder left, Reminder rigt)
+        public static int DateDifferenceInDays(DateOnly left, DateOnly rigt)
         {
-            if (left.Calendar.Month > rigt.Calendar.Month) return true;
-            else if (left.Calendar.Month == rigt.Calendar.Month && left.Calendar.Day > rigt.Calendar.Day) return true;
-            else return false;
-        }*/
+            if (left.Month == rigt.Month && left.Day >= rigt.Day) 
+                return left.Day - rigt.Day;
+            else if (left.Month > rigt.Month) 
+                left = new DateOnly(rigt.Year, left.Month, left.Day);
+            else if (left.Month < rigt.Month || (left.Month == rigt.Month && left.Day < rigt.Day))
+                left = new DateOnly(rigt.Year + 1, left.Month, left.Day);
+            return left.DayNumber - rigt.DayNumber;
+        }
 
     }
 }

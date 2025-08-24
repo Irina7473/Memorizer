@@ -7,12 +7,13 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ClassLibrary
 {
     public static class SaveToFile
     {
-        public static Message Info;
+        //public static Message Info;
         private static string FilePath = Path.Combine(Path.GetDirectoryName(
             Assembly.GetExecutingAssembly().Location), "Memorizer.txt");
 
@@ -29,9 +30,7 @@ namespace ClassLibrary
             }                
             //Info?.Invoke("Список дат записан в файл");
         }
-        
-
-        //todo
+                
         public static ObservableCollection<Reminder> ReaderFromFail()
         {
             if (File.Exists(FilePath))
@@ -54,7 +53,39 @@ namespace ClassLibrary
             }
             else
             {
-                Info?.Invoke("Файл не существует или путь указан неверно");
+                //Info?.Invoke("Файл не существует или путь указан неверно");
+                return null;
+            }
+        }
+
+        public static ObservableCollection<Reminder> ReaderFromFail(DateOnly date)
+        {
+            if (File.Exists(FilePath))
+            {
+                var items = new ObservableCollection<Reminder>();
+                using (var reader = new StreamReader(FilePath))
+                {
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        string[] feld = line.Split('/');
+
+                        if (DateOnly.TryParseExact(feld[0], "dd.MM.yyyy", null, DateTimeStyles.None, out DateOnly calendar) 
+                            && Int32.TryParse(feld[2], out int remind))
+                        {                                 
+                            if (remind >= Reminder.DateDifferenceInDays(calendar, DateOnly.FromDateTime(DateTime.Now)))
+                            {
+                                var item = new Reminder(calendar, feld[1], remind);
+                                items.Add(item);
+                            }
+                        }
+                    }
+                }                                
+                return items;
+            }
+            else
+            {
+                //Info?.Invoke("Файл не существует или путь указан неверно");
                 return null;
             }
         }
@@ -63,7 +94,7 @@ namespace ClassLibrary
         {
             if (File.Exists(FilePath))
                 File.WriteAllText(FilePath, null);
-            else Info?.Invoke("Файл не существует или путь указан неверно");
+            //else Info?.Invoke("Файл не существует или путь указан неверно");
         }
     }
 }
