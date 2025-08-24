@@ -9,11 +9,34 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="resources\fond2.jpeg" />
+    <None Remove="resources\fond3.jpg" />
+    <None Remove="resources\fond5.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MahApps.Metro" Version="2.4.10" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Новая папка1\" />
+    <Folder Include="Новая папка\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="resources\fond2.jpeg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="resources\fond3.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="resources\fond5.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

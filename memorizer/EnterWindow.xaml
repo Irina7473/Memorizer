@@ -9,27 +9,33 @@
     <Window.Resources>
         <ResourceDictionary Source="Style.xaml" />
     </Window.Resources>
-
-    <Grid Margin="10">
-        <StackPanel>
-
-            <Label Content="Ваши ближайшие события" Height="30" FontSize="15" HorizontalAlignment="Center"/>
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Height="350">
-                <ListView Name="ObjectiveList" ItemsSource="{Binding ITEMS}">
-                    <ListView.View>
-                        <GridView >
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=Date}" Width="150">Дата</GridViewColumn>
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Width="550">Описание</GridViewColumn>
-                        </GridView>
-                    </ListView.View>                    
-                </ListView>
-            </ScrollViewer>
-
-            <Button x:Name="ButtonListManagement" Content="Перейти в список" Click="ButtonListManagement_Click"  
-                    Style="{DynamicResource style_ButtonEntry}" />
-            <Button x:Name="Button_Exit" Content="Выйти" Click="Button_Exit_Click"      
-                    Style="{DynamicResource style_ButtonEntry}" />
-
-        </StackPanel>
+    
+    <Grid>        
+        <Grid.Background>
+            <ImageBrush ImageSource="resources/fond3.jpg" Stretch="UniformToFill"/>
+        </Grid.Background>
+        <Border Background="White" Opacity="0.7" Margin="10">
+            <StackPanel>
+                <Label Content="Ваши ближайшие события" Height="35" FontSize="20" HorizontalAlignment="Center" 
+                       FontWeight="Bold" FontStyle="Italic"  Foreground="DarkCyan"/>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Height="350">
+                    <ListView Name="ObjectiveList" ItemsSource="{Binding ITEMS}" 
+                              FontSize="20" FontWeight="Bold" FontStyle="Italic" Foreground="DarkSlateGray">
+                        <ListView.View >
+                            <GridView >
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Date}" Width="150">Дата</GridViewColumn>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Width="550">Описание</GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </ScrollViewer>
+                <WrapPanel HorizontalAlignment="Center">
+                    <Button x:Name="ButtonListManagement" Content="Перейти в список" Click="ButtonListManagement_Click"  
+                                Style="{DynamicResource style_ButtonEntry}" />
+                    <Button x:Name="Button_Exit" Content="Выйти" Click="Button_Exit_Click"      
+                                Style="{DynamicResource style_ButtonEntry}" />
+                </WrapPanel>   
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>

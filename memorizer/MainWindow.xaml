@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:memorizer" xmlns:classlibrary="clr-namespace:ClassLibrary;assembly=ClassLibrary" d:DataContext="{d:DesignInstance Type=classlibrary:Reminder}"
         mc:Ignorable="d"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
-        Title="Memorizer" Height="700" Width="900">
+        Title="Memorizer" Height="700" Width="900" Background="LightGray">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -17,7 +17,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid>
+    <Grid>        
         <StackPanel Height="650" Width="850">
             <Label Content="Ваши даты для напоминания" Height="30" FontSize="15" HorizontalAlignment="Center"/>
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Height="350">
