@@ -1,7 +1,9 @@
 ﻿using ClassLibrary;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -29,8 +31,9 @@ namespace memorizer
             ITEMS = [];
             DataContext = this;
             Uploading_Click();
+            this.Closing += Window_Exit_Click;
         }
-
+                
         private void Uploading_Click()
         {
             ITEMS = SaveToFile.ReaderFromFail(DateOnly.FromDateTime(DateTime.Now));
@@ -42,30 +45,37 @@ namespace memorizer
                 );
                 ObjectiveList.ItemsSource = ITEMS;
             }
-            else MessageBox.Show("Ближайших событий не найдено");
+            else InformTextBlock.Text = "Ближайших событий не найдено";
         }
 
-        
+        // Метод перехода в главное окно
         private void ButtonListManagement_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow entry = new MainWindow();
+            MainWindow entry = new ();
             entry.Show();
+            UnsubscribeFromClosing();
             this.Close();
         }
-
-        private void Button_Exit_Click(object sender, RoutedEventArgs e)
-        {
-            CustomClose();
-        }
-        private void CustomClose()
-        {            
+        
+        //Кастомный метод закрытия окна
+        private void Window_Exit_Click(object sender, System.ComponentModel.CancelEventArgs e)
+        {                
             MessageBoxResult result = MessageBox.Show(
-                "Вы уверены, что хотите закрыть окно?", 
-                "Подтверждение", MessageBoxButton.YesNo,
+                "Вы уверены, что хотите выйти?",
+                "Подтверждение выхода", MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
-            if (result == MessageBoxResult.Yes) this.Close();
+            if (result == MessageBoxResult.No) e.Cancel = true;
         }
 
-                
+        // Метод для отписки
+        private void UnsubscribeFromClosing()
+        {
+            this.Closing -= Window_Exit_Click;  // Отписка от события
+        }
+
+       
+
+
+
     }
 }

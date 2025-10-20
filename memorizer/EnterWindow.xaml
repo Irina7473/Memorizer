@@ -29,11 +29,11 @@
                         </ListView.View>
                     </ListView>
                 </ScrollViewer>
-                <WrapPanel HorizontalAlignment="Center">
+                <WrapPanel HorizontalAlignment="Center">                    
+                    <TextBlock x:Name="InformTextBlock" Height="35" FontSize="20" HorizontalAlignment="Center" 
+                                FontWeight="Bold" FontStyle="Italic"  Foreground="DarkCyan"/>
                     <Button x:Name="ButtonListManagement" Content="Перейти в список" Click="ButtonListManagement_Click"  
-                                Style="{DynamicResource style_ButtonEntry}" />
-                    <Button x:Name="Button_Exit" Content="Выйти" Click="Button_Exit_Click"      
-                                Style="{DynamicResource style_ButtonEntry}" />
+                                Style="{DynamicResource style_ButtonEntry}" />                    
                 </WrapPanel>   
             </StackPanel>
         </Border>

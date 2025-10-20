@@ -1,0 +1,42 @@
+﻿<Window x:Class="memorizer.SettingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:memorizer"
+        mc:Ignorable="d"
+        Title="SettingWindow" Height="700" Width="900" Background="LightGray">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Style.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Grid>
+        <StackPanel>
+        <TextBlock Text="Настройки" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="24"/>
+        <Label DockPanel.Dock="Top" Content="Выберите цветовую схему" FontSize="20" />
+        <DockPanel HorizontalAlignment="Center" Margin="10">
+            <RadioButton x:Name="RadioButton_ColorScheme1" GroupName="ColorScheme" 
+                         Checked="RadioButton_ColorScheme1_Checked" FontSize="15" Margin="10" />
+            <Image Source="resources/fond3.jpg" Width="200" Height="100" Stretch="Fill" />
+        </DockPanel>
+        <DockPanel HorizontalAlignment="Center" Margin="10">
+            <RadioButton x:Name="RadioButton_ColorScheme2" GroupName="ColorScheme"
+                         Checked="RadioButton_ColorScheme2_Checked" FontSize="15" Margin="10"/>
+            <Image Source="resources/fond2.jpeg" Width="200" Height="100" Stretch="Fill" />
+        </DockPanel>
+        <DockPanel HorizontalAlignment="Center" Margin="10">
+            <RadioButton x:Name="RadioButton_ColorScheme3" GroupName="ColorScheme"                 
+                         Checked="RadioButton_ColorScheme3_Checked" FontSize="15" Margin="10"/>
+            <Image Source="resources/fond5.jpg" Width="200" Height="100" Stretch="Fill" />
+        </DockPanel>
+        <Button x:Name="SaveChoice" Content="Запомнить выбор" Click="SaveChoice_Click" 
+                Style="{DynamicResource style_Button}"/>
+        </StackPanel>
+    </Grid>
+</Window>

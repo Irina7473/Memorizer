@@ -20,7 +20,7 @@
     <Grid>        
         <StackPanel Height="650" Width="850">
             <Label Content="Ваши даты для напоминания" Height="30" FontSize="15" HorizontalAlignment="Center"/>
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Height="350">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Height="400">
                 <ListView Name="ObjectiveList" ItemsSource="{Binding ITEMS}">                
                     <ListView.View>
                         <GridView >
@@ -37,11 +37,7 @@
                     </ListView.ContextMenu>
                  </ListView>
             </ScrollViewer>
-
-            <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Left"  Margin="10">
-                <Button x:Name="AddLine" Content="Добавить строки" Click="AddLine_Click" Style="{DynamicResource style_Button}"/>
-                <TextBox Name="LineTextBox" Width="40" Height="25" TextAlignment="Center" FontSize="12" />
-            </WrapPanel>
+            
             <WrapPanel>
                 <TextBox x:Name="CalendarTextBox" controls:TextBoxHelper.Watermark="Дата ХХ.ХХ.ХХХХ" 
                          Width="150" Height="50" FontSize="15" TextWrapping="Wrap" />
@@ -51,16 +47,20 @@
                          Width="150" Height="50" FontSize="15" TextWrapping="Wrap" />
                 <Button x:Name="AddReminder"  Content="Добавить в список" Click="AddReminder_Click" Style="{DynamicResource style_Button}"/>
                 <Button x:Name="UpdateReminde"  Content="Записать изменения" Click="UpdateReminde_Click" Style="{DynamicResource style_Button}" />
-                <Button x:Name="RecordToFile"  Content="Записать в файл" Click="RecordToFile_Click" Style="{DynamicResource style_Button}" />
+                <Button x:Name="AddLine" Content="Добавить строки" Click="AddLine_Click" Style="{DynamicResource style_Button}"/>
+                <TextBox Name="LineTextBox" Width="40" Height="25" TextAlignment="Center" FontSize="12" />                
                 <Button x:Name="SortByCalendars"  Content="Сортировать по датам" Click="SortByCalendars_Click" Style="{DynamicResource style_Button}" />
                 <Button x:Name="ShowForCurrentMonth"  Content="Показать все за текущий месяц" Click="ShowForCurrentMonth_Click" Style="{DynamicResource style_Button}" />
                 <Button x:Name="ShowAll"  Content="Показать все" Click="ShowAll_Click" Style="{DynamicResource style_Button}" />                
                 <TextBox Name="SearchPhraseTextBox" Width="550" Height="30" TextAlignment="Center" FontSize="15" TextWrapping="Wrap" />
                 <Button x:Name="FindByDescription"  Content="Найти по описанию" Click="FindByDescription_Click" Style="{DynamicResource style_Button}" />
+                <Button x:Name="RecordToFile"  Content="Записать в файл" Click="RecordToFile_Click" Style="{DynamicResource style_Button}" />
+                <Button x:Name="SoonEvents"  Content="Посмотреть ближайшие" Click="SoonEvents_Click" Style="{DynamicResource style_Button}" />
+                <Button x:Name="Setting"  Content="Перейти в настройки" Click="Setting_Click" Style="{DynamicResource style_Button}" />
             </WrapPanel>
 
         </StackPanel>
-
+        <!--
         <StatusBar Name="sbar" VerticalAlignment="Bottom"  Background="LightBlue" Foreground="Black" >
             <StatusBarItem>
                 <TextBlock Text="Состояние"/>
@@ -70,5 +70,6 @@
                 <TextBlock x:Name="State" />
             </StatusBarItem>
         </StatusBar>
+        -->
     </Grid>
 </mah:MetroWindow>

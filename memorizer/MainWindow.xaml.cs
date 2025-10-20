@@ -33,6 +33,7 @@ namespace memorizer
         public MainWindow()
         {
             InitializeComponent();
+            this.Closing += Window_Exit_Click;
             ITEMS = [];
             Reminders = [];
             FIND = [];
@@ -187,8 +188,51 @@ namespace memorizer
                 FIND = [];
             }
             SearchPhraseTextBox.Clear();
-        }                      
+        }
         
+        private void SoonEvents_Click(object sender, RoutedEventArgs e)
+        {
+            EnterWindow entry = new ();
+            entry.Show();
+            MoveToAnotherWindow();
+        }
+
+        private void Setting_Click(object sender, RoutedEventArgs e)
+        {
+            SettingWindow entry = new SettingWindow();
+            entry.Show();
+            MoveToAnotherWindow();
+        }
+
+        private void MoveToAnotherWindow()
+        {
+            SaveToFile.RecordToFile(Reminders);
+            UnsubscribeFromClosing();
+            this.Close();
+        }
+
+        //Кастомный метод закрытия окна
+        private void Window_Exit_Click(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show(
+                "Вы уверены, что хотите выйти?",
+                "Подтверждение выхода", MessageBoxButton.YesNo,
+                MessageBoxImage.Question);            
+            if (result == MessageBoxResult.No) e.Cancel = true;
+            else SaveToFile.RecordToFile(Reminders);
+        }
+
+        // Метод для отписки
+        private void UnsubscribeFromClosing()
+        {
+            this.Closing -= Window_Exit_Click;  // Отписка от события
+        }
+
+    }
+}
+
+
+/*
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             var result = MessageBox.Show(
@@ -204,6 +248,4 @@ namespace memorizer
             else SaveToFile.RecordToFile(Reminders);
             base.OnClosing(e);
         }
-
-    }
-}
+        */
