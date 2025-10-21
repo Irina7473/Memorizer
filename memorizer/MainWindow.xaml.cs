@@ -29,6 +29,7 @@ namespace memorizer
         public ObservableCollection<Reminder> Reminders { get; set; }
         public ObservableCollection<Reminder> FIND { get; set; }
         int index;
+        public DateOnly SelectedDate { get; set; } // = DateTime.Today;
 
         public MainWindow()
         {
@@ -41,21 +42,37 @@ namespace memorizer
             index = -1;
             Uploading_Click();
         }
+        private void CalendarPicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //SelectedDate = DateOnly.FromDateTime((DateTime)CalendarPicker.SelectedDate);
+            CalendarPicker.Background = new SolidColorBrush(Colors.White);
+        }
+
+        private void RemindTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            RemindTextBox.Background = new SolidColorBrush(Colors.White);
+        }
 
         private Reminder? NewReminder()
         {
             string description = DescriptionTextBox.Text;
-            if (DateOnly.TryParseExact(CalendarTextBox.Text, "dd.MM.yyyy", CultureInfo.InvariantCulture, 
-                DateTimeStyles.None, out DateOnly calendar)
-                && Int32.TryParse(RemindTextBox.Text, out int remind))
+           
+            if (CalendarPicker.SelectedDate == null)
             {
-                return new Reminder(calendar, description, remind);
+                CalendarPicker.Background = new SolidColorBrush(Colors.Coral);
+                return null;
+            }
+            if (Int32.TryParse(RemindTextBox.Text, out int remind))
+            {                
+                SelectedDate = DateOnly.FromDateTime(CalendarPicker.SelectedDate.Value);
+                return new Reminder(SelectedDate, description, remind);
             }
             else
             {
-                MessageBox.Show("Введите валидные дату и количество дней для напоминания");
+                RemindTextBox.Background = new SolidColorBrush(Colors.Coral);
                 return null;
             }
+           
         }
 
         private void AddReminder_Click(object sender, RoutedEventArgs e)
@@ -66,10 +83,11 @@ namespace memorizer
                 Reminders.Add(item);
                 ITEMS = new ObservableCollection<Reminder>(Reminders.OrderBy(item => item.Calendar));
                 ObjectiveList.ItemsSource = ITEMS;
-                CalendarTextBox.Clear();
+                //CalendarTextBox.Clear();
+                CalendarPicker.SelectedDate = null;
                 DescriptionTextBox.Clear();
                 RemindTextBox.Clear();
-                State.Text = "Дата добавлена в список";
+                //State.Text = "Дата добавлена в список";
             }           
         }
 
@@ -80,7 +98,8 @@ namespace memorizer
                 index = Reminders.IndexOf(selectedItem);
                 if (index != -1)
                 {
-                    CalendarTextBox.Text = selectedItem.Date;
+                    //CalendarTextBox.Text = selectedItem.Date;
+                    CalendarPicker.SelectedDate = selectedItem.Calendar.ToDateTime(TimeOnly.MinValue);
                     DescriptionTextBox.Text = selectedItem.Description;
                     RemindTextBox.Text = selectedItem.Remind.ToString();
                 }
@@ -95,9 +114,10 @@ namespace memorizer
                 Reminders[index] = item;
                 ITEMS = new ObservableCollection<Reminder>(Reminders.OrderBy(p => p.Calendar));
                 ObjectiveList.ItemsSource = ITEMS;
-                State.Text = "Дата изменена";
+                //State.Text = "Дата изменена";
             }
-            CalendarTextBox.Clear();
+            //CalendarTextBox.Clear();
+            CalendarPicker.SelectedDate = null;
             DescriptionTextBox.Clear();
             RemindTextBox.Clear();
         }
@@ -107,7 +127,7 @@ namespace memorizer
             if (ObjectiveList.SelectedItem is Reminder selectedItem)
             {
                 ITEMS.Remove(selectedItem);
-                State.Text = "Дата удалена";
+                //State.Text = "Дата удалена";
             }
         }
 
@@ -125,7 +145,7 @@ namespace memorizer
         private void RecordToFile_Click(object sender, RoutedEventArgs e)
         {
             SaveToFile.RecordToFile(Reminders);
-            State.Text = "Список дат записан в файл";
+            //State.Text = "Список дат записан в файл";
         }
 
         private void ShowAll_Click(object sender, RoutedEventArgs e)
@@ -141,9 +161,9 @@ namespace memorizer
             {
                 ITEMS = new ObservableCollection<Reminder>(Reminders.OrderBy(item => item.Calendar));
                 ObjectiveList.ItemsSource = ITEMS;
-                State.Text = "Список дат загружен из файла";
+                //State.Text = "Список дат загружен из файла";
             }
-            else State.Text = "Список дат пуст";
+           // else State.Text = "Список дат пуст";
         }
 
         private void SortByCalendars_Click(object sender, RoutedEventArgs e)
@@ -189,25 +209,28 @@ namespace memorizer
             }
             SearchPhraseTextBox.Clear();
         }
-        
+
+        //Метод для перехода в окно входа (ближайшие события)
         private void SoonEvents_Click(object sender, RoutedEventArgs e)
         {
-            EnterWindow entry = new ();
+            SaveToFile.RecordToFile(Reminders);
+            EnterWindow entry = new();
             entry.Show();
             MoveToAnotherWindow();
         }
 
+        //Метод для перехода в окно настроек
         private void Setting_Click(object sender, RoutedEventArgs e)
         {
-            SettingWindow entry = new SettingWindow();
+            SettingWindow entry = new();
             entry.Show();
             MoveToAnotherWindow();
         }
 
+        //Метод для закрытия этого окна при переходе в другое
         private void MoveToAnotherWindow()
         {
-            SaveToFile.RecordToFile(Reminders);
-            UnsubscribeFromClosing();
+            this.Closing -= Window_Exit_Click;  // Отписка от события;
             this.Close();
         }
 
@@ -222,17 +245,20 @@ namespace memorizer
             else SaveToFile.RecordToFile(Reminders);
         }
 
-        // Метод для отписки
-        private void UnsubscribeFromClosing()
-        {
-            this.Closing -= Window_Exit_Click;  // Отписка от события
-        }
-
     }
 }
 
 
 /*
+ * 
+ * <DatePicker Name="MyDatePicker" 
+            SelectedDate="{Binding Path=SelectedDate, Mode=TwoWay}" 
+            DisplayDate="2023-01-01" 
+            FirstDayOfWeek="Monday" 
+            IsTodayHighlighted="True"
+            HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             var result = MessageBox.Show(

@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:memorizer" xmlns:classlibrary="clr-namespace:ClassLibrary;assembly=ClassLibrary" d:DataContext="{d:DesignInstance Type=classlibrary:Reminder}"
         mc:Ignorable="d"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
-        Title="Memorizer" Height="700" Width="900" Background="LightGray">
+        Title="Memorizer" Height="600" Width="900" Background="LightGray">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -18,9 +18,9 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid>        
-        <StackPanel Height="650" Width="850">
+        <StackPanel Height="580" Width="880">
             <Label Content="Ваши даты для напоминания" Height="30" FontSize="15" HorizontalAlignment="Center"/>
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Height="400">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Height="300">
                 <ListView Name="ObjectiveList" ItemsSource="{Binding ITEMS}">                
                     <ListView.View>
                         <GridView >
@@ -38,13 +38,16 @@
                  </ListView>
             </ScrollViewer>
             
-            <WrapPanel>
-                <TextBox x:Name="CalendarTextBox" controls:TextBoxHelper.Watermark="Дата ХХ.ХХ.ХХХХ" 
-                         Width="150" Height="50" FontSize="15" TextWrapping="Wrap" />
+            <WrapPanel Margin="10" HorizontalAlignment="Center">
+             <!--   <TextBox x:Name="CalendarTextBox" controls:TextBoxHelper.Watermark="Дата ХХ.ХХ.ХХХХ" 
+                         Width="150" Height="50" FontSize="15" TextWrapping="Wrap" />   -->
+                <DatePicker Name="CalendarPicker" SelectedDateChanged="CalendarPicker_SelectedDateChanged" 
+                        HorizontalAlignment="Center" VerticalAlignment="Center" Height="30"/>
                 <TextBox x:Name="DescriptionTextBox" controls:TextBoxHelper.Watermark="Описание" 
-                         Width="550" Height="50" FontSize="15" TextWrapping="Wrap" />
+                         Width="600" Height="30" FontSize="15" TextWrapping="Wrap" />
                 <TextBox x:Name="RemindTextBox" controls:TextBoxHelper.Watermark="За сколько дней напомнить" 
-                         Width="150" Height="50" FontSize="15" TextWrapping="Wrap" />
+                         Width="150" Height="50" FontSize="15" TextWrapping="Wrap" 
+                         TextChanged="RemindTextBox_TextChanged"/>
                 <Button x:Name="AddReminder"  Content="Добавить в список" Click="AddReminder_Click" Style="{DynamicResource style_Button}"/>
                 <Button x:Name="UpdateReminde"  Content="Записать изменения" Click="UpdateReminde_Click" Style="{DynamicResource style_Button}" />
                 <Button x:Name="AddLine" Content="Добавить строки" Click="AddLine_Click" Style="{DynamicResource style_Button}"/>

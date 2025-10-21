@@ -53,7 +53,7 @@ namespace memorizer
         {
             MainWindow entry = new ();
             entry.Show();
-            UnsubscribeFromClosing();
+            this.Closing -= Window_Exit_Click;  // Отписка от события
             this.Close();
         }
         
@@ -66,16 +66,6 @@ namespace memorizer
                 MessageBoxImage.Question);
             if (result == MessageBoxResult.No) e.Cancel = true;
         }
-
-        // Метод для отписки
-        private void UnsubscribeFromClosing()
-        {
-            this.Closing -= Window_Exit_Click;  // Отписка от события
-        }
-
-       
-
-
-
+        
     }
 }
