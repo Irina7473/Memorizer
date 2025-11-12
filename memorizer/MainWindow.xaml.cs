@@ -109,7 +109,7 @@ namespace memorizer
         private void UpdateReminde_Click(object sender, RoutedEventArgs e)
         {
             var item = NewReminder();
-            if (index != -1 && item is not null && item != ITEMS[index])
+            if (index != -1 && item is not null && item != Reminders[index])
             { 
                 Reminders[index] = item;
                 ITEMS = new ObservableCollection<Reminder>(Reminders.OrderBy(p => p.Calendar));
